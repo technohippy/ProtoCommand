@@ -1,0 +1,33 @@
+<html>
+<head>
+  <script src="http://www.google.com/jsapi"></script>
+  <script>google.load('prototype', '1.6.0.3')</script>
+  <script src="src/protocommand.js"></script>
+  <script>
+  (function() {
+    var konami = new ProtoCommand();
+    konami.setCommand('up up down down left right left right b a');
+    konami.action = function() {
+      document.body.style.backgroundColor = 'black';
+    };
+    konami.reset = function() {
+      document.body.style.backgroundColor = 'white';
+    };
+
+    var google = new ProtoCommand();
+    google.setCommand('g o o g l e enter');
+    google.link('http://google.com');
+
+    ProtoCommand.observeAll();
+  })();
+  </script>
+</head>
+<body>
+  <dl>
+    <dt>Change background color</dt>
+    <dd>[up][up][down][down][left][right][left][right][b][a]</dd>
+    <dt>move to http://google.com</dt>
+    <dd>[g][o][o][g][l][e][enter]</dd>
+  </dl>
+</body>
+</html>
