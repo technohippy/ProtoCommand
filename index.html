@@ -5,8 +5,7 @@
   <script src="src/protocommand.js"></script>
   <script>
   (function() {
-    var konami = new ProtoCommand();
-    konami.setCommand('up up down down left right left right b a');
+    var konami = new ProtoCommand('up up down down left right left right b a');
     konami.action = function() {
       document.body.style.backgroundColor = 'black';
     };
@@ -14,8 +13,7 @@
       document.body.style.backgroundColor = 'white';
     };
 
-    var google = new ProtoCommand();
-    google.setCommand('g o o g l e enter');
+    var google = new ProtoCommand('g o o g l e enter');
     google.link('http://google.com');
 
     ProtoCommand.observeAll();

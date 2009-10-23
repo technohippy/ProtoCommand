@@ -23,8 +23,8 @@ ProtoCommand.observeAll = function() {
   });
 }
 ProtoCommand.prototype = {
-  initialize: function() {
-    this.setCommand('up right down left');
+  initialize: function(command) {
+    this.setCommand(command);
     ProtoCommand.all.push(this);
   },
   setCommand: function(command) {
