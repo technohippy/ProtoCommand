@@ -38,7 +38,7 @@ ProtoCommand.prototype = {
     this.current = this.command.clone();
   },
   action: function() {
-    alert("Please setup the `action' function.");
+    alert("Please setup your own `action' function.");
   },
   reset: function() {
   },
