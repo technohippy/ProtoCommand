@@ -1,7 +1,9 @@
-ProtoCommand = Class.create();
-ProtoCommand.all = $A();
+function ProtoCommand(command) {this.initialize(command)};
+ProtoCommand.all = [];
 ProtoCommand.resetAllStatus = function() {
-  ProtoCommand.all.each(function(cmd) {cmd.resetStatus();});
+  for (var i = 0; i < ProtoCommand.all.length; i++) {
+    ProtoCommand.all[i].resetStatus();
+  }
 };
 ProtoCommand.keys = {
   f1:112, f2:113, f3:114, f4:115, f5:116, 
@@ -14,13 +16,25 @@ ProtoCommand.keys = {
   v:86, w:87, x:88, y:89, z:90
 };
 ProtoCommand.observe = function(command) {
-  Event.observe(window, 'keydown', function(e) {
-    command.put(e.keyCode)});
+  // ref. http://liosk.blog103.fc2.com/blog-entry-61.html
+  var type = 'keydown';
+  var listener = function(e){command.put(e.keyCode)};
+  if (window.addEventListener) {
+    window.addEventListener(type, listener, false);
+  }
+  else if (window.attachEvent) {
+    window.attachEvent('on' + type, 
+      function(){listener.call(window, window.event)});
+  }
+  else {
+    window['on' + type] = function(e){
+      listener.call(target, e || window.event)};
+  }
 }
 ProtoCommand.observeAll = function() {
-  ProtoCommand.all.each(function(e) {
-    ProtoCommand.observe(e);
-  });
+  for (var i = 0; i < ProtoCommand.all.length; i++) {
+    ProtoCommand.observe(ProtoCommand.all[i]);
+  }
 }
 ProtoCommand.prototype = {
   initialize: function(command) {
@@ -28,14 +42,18 @@ ProtoCommand.prototype = {
     ProtoCommand.all.push(this);
   },
   setCommand: function(command) {
-    this.command = $A();
-    command.split(' ').each(function(key) {
-      this.command.push(ProtoCommand.keys[key]);
-    }.bind(this));
+    this.command = [];
+    var keys = command.split(' ');
+    for (var i = 0; i < keys.length; i++) {
+      this.command.push(ProtoCommand.keys[keys[i]]);
+    }
     this.resetStatus();
   },
   resetStatus: function() {
-    this.current = this.command.clone();
+    this.current = [];
+    for (var i = 0; i < this.command.length; i++) {
+      this.current.push(this.command[i]);
+    }
   },
   action: function() {
     alert("Please setup your own `action' function.");
@@ -46,7 +64,7 @@ ProtoCommand.prototype = {
     this.action = function(){window.location = url};
   },
   put: function(keyCode) {
-    if (this.current.first() == keyCode) {
+    if (this.current[0] == keyCode) {
       this.current.shift();
       if (this.current.length == 0) {
         this.action();
